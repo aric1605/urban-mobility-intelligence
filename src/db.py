@@ -6,8 +6,9 @@ from typing import Any, Dict, Optional
 import pandas as pd
 
 
-DB_PATH = Path("data/urban.db")
-SQL_DIR = Path("sql/queries")
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DB_PATH = ROOT_DIR / "data" / "urban.db"
+SQL_DIR = ROOT_DIR / "sql" / "queries"
 
 
 def get_connection(db_path: Path = DB_PATH, read_only: bool = True) -> sqlite3.Connection:

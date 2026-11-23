@@ -5,7 +5,13 @@ A high-performance interactive dashboard for NYC traffic congestion, forecasting
 import json
 from pathlib import Path
 import sqlite3
+import sys
 from typing import Any, Dict, List, Optional, Tuple
+
+# Ensure project root is always in sys.path for Streamlit Cloud deployment
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 
 import folium
 from folium.plugins import HeatMap
@@ -27,8 +33,8 @@ from src.db import (
 )
 
 
-DB_PATH = Path("data/urban.db")
-GEOJSON_PATH = Path("data/taxi_zones.geojson")
+DB_PATH = ROOT_DIR / "data" / "urban.db"
+GEOJSON_PATH = ROOT_DIR / "data" / "taxi_zones.geojson"
 
 st.set_page_config(
     page_title="NYC Urban Mobility Intelligence",
