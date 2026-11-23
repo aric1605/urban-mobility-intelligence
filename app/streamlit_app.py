@@ -407,7 +407,7 @@ with tab_overview:
         yaxis=dict(range=[0, 1]),
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
-    st.plotly_chart(fig_rolling, use_container_width=True)
+    st.plotly_chart(fig_rolling, width="stretch")
 
 
 # =========================================================
@@ -441,11 +441,18 @@ with tab_map:
             m = folium.Map(
                 location=[40.75, -73.98],
                 zoom_start=11,
-                tiles="CartoDB dark_matter",
+                tiles="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                attr='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                name="Dark Theme",
                 control_scale=True,
             )
             # Add basemap tile layer switcher
-            folium.TileLayer("CartoDB positron", name="Light Theme").add_to(m)
+            folium.TileLayer(
+                tiles="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                attr='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                name="Light Theme",
+            ).add_to(m)
+            folium.TileLayer("OpenStreetMap", name="OpenStreetMap").add_to(m)
 
             # Color scale function
             def get_color(cong_val):
@@ -509,7 +516,7 @@ with tab_map:
             display_top10["mean_speed_mph"] = display_top10["mean_speed_mph"].apply(lambda v: f"{v:.1f} mph")
             display_top10["total_trips"] = display_top10["total_trips"].apply(lambda v: f"{v:,}")
             display_top10.columns = ["Rank", "Zone Name", "Borough", "Congestion", "Avg Speed", "Trips"]
-            st.dataframe(display_top10, hide_index=True, use_container_width=True)
+            st.dataframe(display_top10, hide_index=True, width="stretch")
         else:
             st.info("No zones met the minimum trips filter for the selected window.")
 
@@ -552,7 +559,7 @@ with tab_peak:
             margin=dict(l=20, r=20, t=40, b=20),
             height=340,
         )
-        st.plotly_chart(fig_heat, use_container_width=True)
+        st.plotly_chart(fig_heat, width="stretch")
 
         col_peak_1, col_peak_2 = st.columns(2)
         with col_peak_1:
@@ -573,7 +580,7 @@ with tab_peak:
                 margin=dict(l=20, r=20, t=30, b=20),
                 height=300,
             )
-            st.plotly_chart(fig_line, use_container_width=True)
+            st.plotly_chart(fig_line, width="stretch")
 
         with col_peak_2:
             st.subheader("Worst Hour per Borough")
@@ -615,7 +622,7 @@ with tab_peak:
                 margin=dict(l=20, r=20, t=30, b=20),
                 height=300,
             )
-            st.plotly_chart(fig_bar, use_container_width=True)
+            st.plotly_chart(fig_bar, width="stretch")
     else:
         st.info("No hourly data available for this selection.")
 
@@ -766,7 +773,7 @@ with tab_forecast:
             yaxis=dict(range=[0, 1]),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         )
-        st.plotly_chart(fig_fc, use_container_width=True)
+        st.plotly_chart(fig_fc, width="stretch")
 
 
 # =========================================================
@@ -784,7 +791,7 @@ with tab_crashes:
         if not c_density.empty:
             disp_c = c_density.head(10)[["crash_rank", "zone_name", "borough", "total_crashes", "total_injured", "total_killed"]].copy()
             disp_c.columns = ["Rank", "Zone Name", "Borough", "Total Crashes", "Injured", "Killed"]
-            st.dataframe(disp_c, hide_index=True, use_container_width=True)
+            st.dataframe(disp_c, hide_index=True, width="stretch")
         else:
             st.info("No crash density data available.")
 
@@ -808,7 +815,7 @@ with tab_crashes:
                 height=300,
                 yaxis=dict(autorange="reversed"),
             )
-            st.plotly_chart(fig_fac, use_container_width=True)
+            st.plotly_chart(fig_fac, width="stretch")
 
     st.subheader("Collisions by Hour of Day")
     if not c_hourly.empty:
@@ -827,7 +834,7 @@ with tab_crashes:
             margin=dict(l=20, r=20, t=20, b=20),
             height=300,
         )
-        st.plotly_chart(fig_chr, use_container_width=True)
+        st.plotly_chart(fig_chr, width="stretch")
 
     st.info(
         "🧠 **Statistical Caution**: Correlation does not equal causation. "
